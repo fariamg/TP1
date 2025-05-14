@@ -4,6 +4,12 @@
 #include <string>
 
 class Statistics {
+  private:
+    int comparisons;           // Número de comparações
+    int movements;             // Número de movimentações
+    int functionCalls;         // Número de chamadas de função
+    std::string algorithmName; // Algoritmo utilizado
+    
   public:
     static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
 
@@ -30,10 +36,4 @@ class Statistics {
 
     // Retorna o nome do algoritmo
     const std::string& getAlgorithmName() const noexcept;
-
-  private:
-    int comparisons;           // Número de comparações
-    int movements;             // Número de movimentações
-    int functionCalls;         // Número de chamadas de função
-    std::string algorithmName; // Algoritmo utilizado
 };
