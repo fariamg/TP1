@@ -18,13 +18,13 @@ class Statistics {
     explicit Statistics(const std::string& algorithmName);
 
     //@ Incrementa o número de comparações
-    void incrementComparisons() noexcept;
+    void incrementComparisons(int cmp) noexcept;
 
     //@ Incrementa o número de movimentações
-    void incrementMovements() noexcept;
+    void incrementMovements(int mvs) noexcept;
 
     //@ Incrementa o número de chamadas de função
-    void incrementFunctionCalls() noexcept;
+    void incrementFunctionCalls(int cll) noexcept;
 
     //@ Retorna o número total de comparações
     int getComparisons() const noexcept;
