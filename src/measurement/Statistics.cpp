@@ -8,16 +8,16 @@ Statistics::Statistics(const std::string& algorithmName) : comparisons(0), movem
     this->algorithmName = algorithmName;
 }
 
-void Statistics::incrementComparisons() noexcept {
-    ++comparisons;
+void Statistics::incrementComparisons(int cmp) noexcept {
+    comparisons += cmp;
 }
 
-void Statistics::incrementMovements() noexcept {
-    ++movements;
+void Statistics::incrementMovements(int mvs) noexcept {
+    movements += mvs;
 }
 
-void Statistics::incrementFunctionCalls() noexcept {
-    ++functionCalls;
+void Statistics::incrementFunctionCalls(int cll) noexcept {
+    functionCalls += cll;
 }
 
 int Statistics::getComparisons() const noexcept {
