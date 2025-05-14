@@ -1,7 +1,12 @@
 #include <Statistics.h>
 #include <string>
 
-Statistics::Statistics(const std::string& algorithmName) : comparisons(0), movements(0), functionCalls(0), algorithmName(algorithmName) {}
+Statistics::Statistics(const std::string& algorithmName) : comparisons(0), movements(0), functionCalls(0) {
+    if (algorithmName.size() > ALGORITHM_NAME_SIZE) {
+        throw std::invalid_argument("Algorithm name exceeds maximum size");
+    }
+    this->algorithmName = algorithmName;
+}
 
 void Statistics::incrementComparisons() noexcept {
     ++comparisons;

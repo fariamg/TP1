@@ -5,6 +5,8 @@
 
 class Statistics {
   public:
+    static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
+
     explicit Statistics(const std::string& algorithmName);
 
     // Incrementa o número de comparações
