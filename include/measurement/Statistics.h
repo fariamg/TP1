@@ -7,6 +7,7 @@ class Statistics {
   public:
     static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
 
+    // COnstruor
     explicit Statistics(const std::string& algorithmName);
 
     // Incrementa o número de comparações
@@ -31,8 +32,8 @@ class Statistics {
     const std::string& getAlgorithmName() const noexcept;
 
   private:
-    int comparisons;   // Número de comparações
-    int movements;     // Número de movimentações
-    int functionCalls; // Número de chamadas de função
+    int comparisons;           // Número de comparações
+    int movements;             // Número de movimentações
+    int functionCalls;         // Número de chamadas de função
     std::string algorithmName; // Algoritmo utilizado
 };
