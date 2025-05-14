@@ -1,11 +1,21 @@
 #include <Timer.h>
 
-void clkDiff(struct timespec t1, struct timespec t2, struct timespec* res) {
-    if ((t2.tv_nsec - t1.tv_nsec) < 0) {
-        res->tv_sec = t2.tv_sec - t1.tv_sec - 1;
-        res->tv_nsec = 1000000000 + t2.tv_nsec - t1.tv_nsec;
-    } else {
-        res->tv_sec = t2.tv_sec - t1.tv_sec;
-        res->tv_nsec = t2.tv_nsec - t1.tv_nsec;
-    }
+using Clock = std::chrono::steady_clock;
+
+Timer::Timer() noexcept : startTime(Clock::now()), endTime(startTime) {}
+
+void Timer::start() noexcept {
+    startTime = Clock::now();
+}
+
+void Timer::stop() noexcept {
+    endTime = Clock::now();
+}
+
+double Timer::elapsedSeconds() const noexcept {
+    return std::chrono::duration<double>(endTime - startTime).count();
+}
+
+long Timer::Nananoseconds() const noexcept {
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
 }
