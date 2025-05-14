@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+/// @ Cuida da coleta de estatísticas de execução do algoritmo
 class Statistics {
   private:
     int comparisons;           //* Número de comparações

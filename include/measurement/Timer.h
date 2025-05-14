@@ -2,6 +2,7 @@
 
 #include <chrono>
 
+//@ Cuida da medição de tempo de execução do algoritmo
 class Timer {
   private:
     Clock::time_point startTime;
