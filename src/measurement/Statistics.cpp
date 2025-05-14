@@ -8,16 +8,30 @@ Statistics::Statistics(const std::string& algorithmName) : comparisons(0), movem
     this->algorithmName = algorithmName;
 }
 
-void Statistics::incrementComparisons() noexcept { ++comparisons; }
+void Statistics::incrementComparisons() noexcept {
+    ++comparisons;
+}
 
-void Statistics::incrementMovements() noexcept { ++movements; }
+void Statistics::incrementMovements() noexcept {
+    ++movements;
+}
 
-void Statistics::incrementFunctionCalls() noexcept { ++functionCalls; }
+void Statistics::incrementFunctionCalls() noexcept {
+    ++functionCalls;
+}
 
-int Statistics::getComparisons() const noexcept { return comparisons; }
+int Statistics::getComparisons() const noexcept {
+    return comparisons;
+}
 
-int Statistics::getMovements() const noexcept { return movements; }
+int Statistics::getMovements() const noexcept {
+    return movements;
+}
 
-int Statistics::getFunctionCalls() const noexcept { return functionCalls; }
+int Statistics::getFunctionCalls() const noexcept {
+    return functionCalls;
+}
 
-const std::string& Statistics::getAlgorithmName() const noexcept { return algorithmName; }
+const std::string& Statistics::getAlgorithmName() const noexcept {
+    return algorithmName;
+}
