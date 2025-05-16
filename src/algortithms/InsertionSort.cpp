@@ -1,4 +1,4 @@
-#include <InsertionSort.h>
+#include "algorithms/InsertionSort.h"
 
 void insertionSort(Vector& v, int l, int r, Statistics& stats) {
     stats.incrementFunctionCalls(1);

@@ -1,4 +1,6 @@
-#include <QuickSort.h>
+#include "algorithms/InsertionSort.h"
+
+int median(int a, int b, int c);
 
 void partition3(Vector& v, int l, int r, int& i, int& j, Statistics& stats) {
     stats.incrementFunctionCalls(1);

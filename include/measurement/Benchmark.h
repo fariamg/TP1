@@ -1,9 +1,8 @@
 #pragma once
 
-#include <Statistics.h>
-#include <Timer.h>
-#include <Vector.h>
-
+#include "measurement/Statistics.h"
+#include "datastructures/Vector.h"
+#include "measurement/Timer.h"
 //? Quem vai cuidar da escrita das estatisticas: benchmark ou algoritmo?
 //@ Cuida da execução do algoritmo, medindo o tempo e coletando estatísticas
 class Benchmark {

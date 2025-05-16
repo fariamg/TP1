@@ -7,7 +7,7 @@ static constexpr size_t MAX_SIZE = 500;
 class Vector {
   private:
     int data[MAX_SIZE];
-    int currentSize = 0;
+    int currentSize;
     int capacity;
 
   public:
@@ -24,7 +24,7 @@ class Vector {
     void setElement(int index, int value);
 
     //@ Adiciona um valor ao final do vetor, se houver espaço
-    void push_back(int value);
+    void push_back(int value) noexcept;
 
     ////void pop_back();
 
@@ -32,7 +32,7 @@ class Vector {
     bool isEmpty() const noexcept;
 
     //@ Limpa o vetor (reseta o tamanho)
-    void clear();
+    void clear() noexcept;
 
     //@ Retorna o tamanho máximo do vetor
     void print() const noexcept;

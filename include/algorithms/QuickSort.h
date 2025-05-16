@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Statistics.h>
-#include <Vector.h>
+#include "measurement/Statistics.h"
+#include "datastructures/Vector.h"
 
 void quickSort(Vector& v, int l, int r, Statistics& stats);
 

@@ -1,4 +1,4 @@
-#include "include/datastructures/Vector.h"
+#include "datastructures/Vector.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -11,8 +11,8 @@
  * Essa abordagem é adequada quando o gerenciamento de memória não é crítico
  * e o desempenho de acesso se torna prioridade.
  */
-Vector::Vector(int capacity) {
-    if (capacity > MAX_SIZE) {
+Vector::Vector(int capacity) noexcept : currentSize(0) {
+    if (capacity > static_cast<int>(MAX_SIZE)) {
         std::cerr << "Aviso: capacidade excede o máximo (" << MAX_SIZE << "). Será ajustada.\n";
         this->capacity = MAX_SIZE;
     } else if (capacity <= 0) {
@@ -30,7 +30,7 @@ int Vector::getElement(int index) const {
     return data[index];
 }
 
-int Vector::getCurrentSize() const {
+int Vector::getCurrentSize() const noexcept{
     return currentSize;
 }
 
@@ -41,7 +41,7 @@ void Vector::setElement(int index, int value) {
     data[index] = value;
 }
 
-void Vector::push_back(int value) {
+void Vector::push_back(int value) noexcept{
     if (currentSize >= capacity) {
         std::cerr << "Erro: vetor cheio. push_back falhou.\n";
         return;
@@ -49,11 +49,11 @@ void Vector::push_back(int value) {
     data[currentSize++] = value;
 }
 
-bool Vector::isEmpty() const {
+bool Vector::isEmpty() const noexcept{
     return currentSize == 0;
 }
 
-void Vector::clear() {
+void Vector::clear() noexcept {
     if (isEmpty()) {
         std::cerr << "Aviso: vetor já está vazio.\n";
         return;
@@ -61,7 +61,7 @@ void Vector::clear() {
     currentSize = 0;
 }
 
-void Vector::print() const {
+void Vector::print() const noexcept {
     if (isEmpty()) {
         std::cout << "[empty]\n";
         return;
