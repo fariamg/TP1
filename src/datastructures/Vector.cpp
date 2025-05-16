@@ -3,9 +3,14 @@
 #include <iostream>
 #include <stdexcept>
 
-//* Utilizando vetor estático devido a lentidão de alocação dinâmica
-//* A utilização de alocação antecipada é mais rápida, mas o tamanho máximo do vetor deve ser definido
-//* Pode ser que haja desperdício de memória, mas o tempo de execução é menor
+/*
+ * Implementado um vetor estático (array de tamanho fixo) para eliminar a sobrecarga
+ * de alocações e desalocações dinâmicas em tempo de execução, aumentando a performance.
+ * A capacidade máxima precisa ser definida antecipadamente, o que pode gerar
+ * desperdício de espaço, mas garante acesso mais rápido e previsível aos elementos.
+ * Essa abordagem é adequada quando o gerenciamento de memória não é crítico
+ * e o desempenho de acesso se torna prioridade.
+ */
 Vector::Vector(int capacity) {
     if (capacity > MAX_SIZE) {
         std::cerr << "Aviso: capacidade excede o máximo (" << MAX_SIZE << "). Será ajustada.\n";
