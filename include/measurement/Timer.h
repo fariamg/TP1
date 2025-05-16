@@ -5,13 +5,13 @@
 //@ Cuida da medição de tempo de execução do algoritmo
 class Timer {
   private:
+    //* Usando o tipo de relógio steady_clock para medir o tempo
+    using Clock = std::chrono::steady_clock;
+    
     Clock::time_point startTime;
     Clock::time_point endTime;
 
   public:
-    //* Usando o tipo de relógio steady_clock para medir o tempo
-    using Clock = std::chrono::steady_clock;
-
     //@ Construtor padrão que não lança exceção
     Timer() noexcept;
 
