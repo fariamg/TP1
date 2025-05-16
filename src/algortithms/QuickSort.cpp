@@ -2,6 +2,27 @@
 
 int median(int a, int b, int c);
 
+void partition3(Vector& v, int l, int r, int& i, int& j, Statistics& stats);
+
+void quickSort(Vector& v, int l, int r, Statistics& stats) {
+    stats.incrementFunctionCalls(1);
+
+    if (l >= r)
+        return;
+
+    int i, j;
+
+    partition3(v, l, r, i, j, stats);
+
+    if (l < j) {
+        quickSort(v, l, j, stats);
+    }
+
+    if (i < r) {
+        quickSort(v, i, r, stats);
+    }
+}
+
 void partition3(Vector& v, int l, int r, int& i, int& j, Statistics& stats) {
     stats.incrementFunctionCalls(1);
 
@@ -24,11 +45,13 @@ void partition3(Vector& v, int l, int r, int& i, int& j, Statistics& stats) {
         stats.incrementComparisons(1);
 
         if (i <= j) {
+            int tmp = v.getElement(i);
+            stats.incrementMovements(1);
             v.setElement(i, v.getElement(j));
-            v.setElement(j, v.getElement(i));
+            stats.incrementMovements(1);
+            v.setElement(j, tmp);
             ++i;
             --j;
-            stats.incrementMovements(2);
         }
     } while (i <= j);
 }
