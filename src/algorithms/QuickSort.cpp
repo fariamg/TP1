@@ -1,29 +1,32 @@
-#include "algorithms/InsertionSort.h"
+#include "algorithms/QuickSort.h"
 
 int median(int a, int b, int c);
 
 void partition3(Vector& v, int l, int r, int& i, int& j);
 
-void quickSort(Vector& v, int l, int r) {
+void quickSortHelper(Vector& v, int l, int r);
 
+void quickSort(Vector& v, int size) {
+    quickSortHelper(v, 0, size - 1);
+}
+
+void quickSortHelper(Vector& v, int l, int r) {
     if (l >= r)
         return;
 
     int i, j;
-
     partition3(v, l, r, i, j);
 
     if (l < j) {
-        quickSort(v, l, j);
+        quickSortHelper(v, l, j);
     }
 
     if (i < r) {
-        quickSort(v, i, r);
+        quickSortHelper(v, i, r);
     }
 }
 
 void partition3(Vector& v, int l, int r, int& i, int& j) {
-
     i = l;
     j = r;
 
@@ -49,15 +52,9 @@ void partition3(Vector& v, int l, int r, int& i, int& j) {
 }
 
 int median(int a, int b, int c) {
-    if ((a <= b) && (b <= c))
+    if ((a <= b && b <= c) || (c <= b && b <= a))
         return b;
-    if ((a <= c) && (c <= b))
-        return c;
-    if ((b <= a) && (a <= c))
+    if ((b <= a && a <= c) || (c <= a && a <= b))
         return a;
-    if ((b <= c) && (c <= a))
-        return c;
-    if ((c <= a) && (a <= b))
-        return a;
-    return b;
+    return c;
 }

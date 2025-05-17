@@ -2,8 +2,9 @@
 
 #include <iterator>
 
-static constexpr size_t MAX_SIZE = 500;
+static constexpr size_t MAX_SIZE = 1000;
 
+//@ Estrutura de dados para armazenar um vetor de inteiros
 class Vector {
   private:
     int data[MAX_SIZE];
@@ -20,7 +21,7 @@ class Vector {
     //@ Retorna o tamanho atual do vetor
     int getCurrentSize() const noexcept;
 
-    //@ Seta um elemento
+    //@ Altera um elemento
     void setElement(int index, int value);
 
     //@ Adiciona um valor ao final do vetor, se houver espaço
