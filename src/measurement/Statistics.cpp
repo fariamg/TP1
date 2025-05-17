@@ -12,12 +12,12 @@ void Statistics::incrementComparisons(int cmp) noexcept {
     comparisons += cmp;
 }
 
-void Statistics::incrementMovements(int mvs) noexcept {
-    movements += mvs;
+void Statistics::incrementMovements(int moves) noexcept {
+    movements += moves;
 }
 
-void Statistics::incrementFunctionCalls(int cll) noexcept {
-    functionCalls += cll;
+void Statistics::incrementFunctionCalls(int calls) noexcept {
+    functionCalls += calls;
 }
 
 int Statistics::getComparisons() const noexcept {
