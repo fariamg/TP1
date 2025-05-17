@@ -27,6 +27,10 @@ int Statistics::getFunctionCalls() const noexcept {
     return functionCalls;
 }
 
+void Statistics::print() const noexcept {
+    std::cout << "cmp" << this->comparisons << " move" << this->movements << " calls" << this->functionCalls << std::endl;
+}
+
 // const std::string& Statistics::getAlgorithmName() const noexcept {
 //     return algorithmName;
 // }

@@ -35,6 +35,9 @@ class Statistics {
     //@ Retorna o número total de chamadas de função
     int getFunctionCalls() const noexcept;
 
+    //@ Printa na saída padrão as estatísticas
+    void print() const noexcept;
+
     /////@ Retorna o nome do algoritmo
     ////const std::string& getAlgorithmName() const noexcept;
 };
