@@ -9,13 +9,11 @@ class Benchmark {
   private:
     Timer timer;
     Statistics stats;
-    Vector data;
 
   public:
   //@ Construtor recebe o nome do algoritmo e a capacidade do vetor
-    Benchmark(const std::string& algorithmName, int capacity) : stats(algorithmName), data(capacity) {} // TODO: de alguma forma precisa ligar ao algoritmo
-    
-    void run() // ? Como vai fazer isso (na chamada da funçao livre do algoritmo precisa passar Statistics por referência)
-    {
-        timer.start();
+  //? Talvez vou tirar o nome do algoritmo de parametro do construtor das stats (pois o nome do algoritmo é o mesmo do benchmark)
+    Benchmark(Vector V) : stats() {} // TODO: de alguma forma precisa ligar ao algoritmo
+
+    void run(); // ? Como vai fazer isso (na chamada da funçao livre do algoritmo precisa passar Statistics por referência)
 };

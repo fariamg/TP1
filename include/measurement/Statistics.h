@@ -9,13 +9,13 @@ class Statistics {
     int comparisons;           //* Número de comparações
     int movements;             //* Número de movimentações
     int functionCalls;         //* Número de chamadas de função
-    std::string algorithmName; //* Algoritmo utilizado
+    //std::string algorithmName; //* Algoritmo utilizado
 
   public:
-    static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
+    //static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
 
     //@ Construtor padrão explícito (evita conversões implícitas)
-    explicit Statistics(const std::string& algorithmName);
+    explicit Statistics();
 
     //@ Incrementa o número de comparações
     void incrementComparisons(int cmp) noexcept;
