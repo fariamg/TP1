@@ -11,14 +11,14 @@ void quickSort(Vector& v, int l, int r) {
 
     int i, j;
 
-    partition3(v, l, r, i, j, );
+    partition3(v, l, r, i, j);
 
     if (l < j) {
-        quickSort(v, l, j, );
+        quickSort(v, l, j);
     }
 
     if (i < r) {
-        quickSort(v, i, r, );
+        quickSort(v, i, r);
     }
 }
 
