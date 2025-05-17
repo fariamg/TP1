@@ -21,6 +21,9 @@ class Vector {
     //@ Retorna o tamanho atual do vetor
     int getCurrentSize() const noexcept;
 
+    //@ Retorna quantas vezes o numéro é menor que seu antecessor imediato (mede a desordem)
+    int getNumBreaks() const noexcept;
+
     //@ Altera um elemento
     void setElement(int index, int value);
 
@@ -37,6 +40,7 @@ class Vector {
 
     //@ Retorna o tamanho máximo do vetor
     void print() const noexcept;
+
 
     //@// Troca os valores entre dois índices válidos
     ////void swap(int index1, int index2);

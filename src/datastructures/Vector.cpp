@@ -34,6 +34,16 @@ int Vector::getCurrentSize() const noexcept{
     return currentSize;
 }
 
+int Vector::getNumBreaks() const noexcept {
+    int breaks = 0;
+    for (int i = 0; i < currentSize - 1; ++i) {
+        if (data[i] > data[i + 1]) {
+            ++breaks;
+        }
+    }
+    return breaks;
+}
+
 void Vector::setElement(int index, int value) {
     if (index < 0 || index >= currentSize) {
         throw std::out_of_range("setElement: índice fora dos limites");
