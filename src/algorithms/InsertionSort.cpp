@@ -1,17 +1,26 @@
 #include "algorithms/InsertionSort.h"
 
-void insertionSort(Vector& v, int size) {
-    for (int i = 1; i < size; ++i) {
-        int aux = v.getElement(i);
-        int j = i - 1;
+void insertionSort(Vector& V, int l, int r, Statistics& stats) {
+    stats.incrementFunctionCalls(1);
+    int j = 0, aux = 0;
 
-        while (j >= 0 && v.getElement(j) > aux) {
-            v.setElement(j + 1, v.getElement(j));
-            --j;
+    for (int i = l + 1; i <= r; i++) {
+        stats.incrementMovements(1);
+        aux = V.getElement(i);
+        j = i - 1;
+
+        while ((j >= 0) && (V.getElement(j) > aux)) {
+            stats.incrementComparisons(1);
+            stats.incrementMovements(1);
+            V.setElement(j + 1, V.getElement(j));
+            j--;
         }
+        stats.incrementComparisons(1);
 
-        if (i != j + 1) {
-            v.setElement(j + 1, aux);
+        if (i != j) {
+            stats.incrementMovements(1);
+            V.setElement(j + 1, aux);
         }
     }
+    return;
 }

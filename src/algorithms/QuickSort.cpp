@@ -1,53 +1,70 @@
 #include "algorithms/QuickSort.h"
+#include "algorithms/InsertionSort.h"
 
 int median(int a, int b, int c);
 
-void partition3(Vector& v, int l, int r, int& i, int& j);
+void partition(Vector& V, int l, int r, int& i, int& j, Statistics& stats);
 
-void quickSortHelper(Vector& v, int l, int r);
+void quickSort(Vector& V, int partitionSize, int l, int r, Statistics& stats) {
+    stats.incrementFunctionCalls(1); // Incrementa chamadas de função
 
-void quickSort(Vector& v, int size) {
-    quickSortHelper(v, 0, size - 1);
-}
-
-void quickSortHelper(Vector& v, int l, int r) {
+    // Caso base
     if (l >= r)
         return;
 
-    int i, j;
-    partition3(v, l, r, i, j);
+    int i = 0, j = 0;
 
+    // Primeira partição
+    partition(V, l, r, i, j, stats);
+
+    // Partições recursivas, com verificação para o insertion sort
     if (l < j) {
-        quickSortHelper(v, l, j);
+        if ((j - l) < partitionSize) {
+            insertionSort(V, l, j, stats); // Usa insertionSort com estatísticas
+        } else {
+            quickSort(V, partitionSize, l, j, stats);
+        }
     }
 
     if (i < r) {
-        quickSortHelper(v, i, r);
+        if ((r - i) < partitionSize) {
+            insertionSort(V, i, r, stats); // Usa insertionSort com estatísticas
+        } else {
+            quickSort(V, partitionSize, i, r, stats);
+        }
     }
 }
 
-void partition3(Vector& v, int l, int r, int& i, int& j) {
+void partition(Vector& V, int l, int r, int& i, int& j, Statistics& stats) {
+    stats.incrementFunctionCalls(1); // Incrementa chamadas de função
+
+    // Escolhe o pivô, sendo o médio do primeiro, último e elemento do meio.
     i = l;
     j = r;
+    int pivot = median(V.getElement(l), V.getElement(r), V.getElement((l + r) / 2));
 
-    int pivot = median(v.getElement(l), v.getElement(r), v.getElement((l + r) / 2));
-
+    // Anda com i e j até encontrar os elementos que devem ser trocados
     do {
-        while (v.getElement(i) < pivot) {
-            ++i;
+        while (V.getElement(i) < pivot) {
+            stats.incrementComparisons(1); // Incrementa comparações
+            i++;
         }
+        stats.incrementComparisons(1); // Incrementa comparações
 
-        while (v.getElement(j) > pivot) {
-            --j;
+        while (V.getElement(j) > pivot) {
+            stats.incrementComparisons(1); // Incrementa comparações
+            j--;
         }
+        stats.incrementComparisons(1); // Incrementa comparações
 
+        // Se eles não se cruzaram ainda, faz a troca e anda +1 posição com i e j.
         if (i <= j) {
-            int tmp = v.getElement(i);
-            v.setElement(i, v.getElement(j));
-            v.setElement(j, tmp);
-            ++i;
-            --j;
+            V.swap(i, j);
+            stats.incrementMovements(2); // Incrementa movimentações (swap conta como 2 movimentos)
+            i++;
+            j--;
         }
+
     } while (i <= j);
 }
 
