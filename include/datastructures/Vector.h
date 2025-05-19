@@ -41,7 +41,6 @@ class Vector {
     //@ Retorna o tamanho máximo do vetor
     void print() const noexcept;
 
-
-    //@// Troca os valores entre dois índices válidos
-    ////void swap(int index1, int index2);
+    //@ Troca os valores entre dois índices válidos
+    void swap(int index1, int index2);
 };

@@ -82,11 +82,11 @@ void Vector::print() const noexcept {
     std::cout << "\n";
 }
 
-/*void Vector::swap(int index1, int index2) {
+void Vector::swap(int index1, int index2) {
     if (index1 < 0 || index1 >= currentSize || index2 < 0 || index2 >= currentSize) {
         throw std::out_of_range("swap: índice(s) fora dos limites");
     }
     int temp = data[index1];
     data[index1] = data[index2];
     data[index2] = temp;
-}*/
+}
