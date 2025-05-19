@@ -9,7 +9,7 @@
  * A capacidade máxima precisa ser definida antecipadamente, o que pode gerar
  * desperdício de espaço, mas garante acesso mais rápido e previsível aos elementos.
  * Essa abordagem é adequada quando o gerenciamento de memória não é crítico
- * e o desempenho de acesso se torna prioridade.
+ * e o desempenho de acesso se torna prioridade, contexto em que se encontra a situação problema do TP.
  */
 Vector::Vector(int capacity) noexcept : currentSize(0) {
     if (capacity > static_cast<int>(MAX_SIZE)) {
@@ -59,6 +59,12 @@ void Vector::push_back(int value) noexcept{
     data[currentSize++] = value;
 }
 
+void Vector::fill() noexcept {
+    for (int i = 0; i < this->currentSize; ++i) {
+        this->push_back(i);
+    }
+}
+
 bool Vector::isEmpty() const noexcept{
     return currentSize == 0;
 }
@@ -89,4 +95,29 @@ void Vector::swap(int index1, int index2) {
     int temp = data[index1];
     data[index1] = data[index2];
     data[index2] = temp;
+}
+
+void Vector::copy(const Vector& other) noexcept {
+    if (this == &other) {
+        std::cerr << "Aviso: cópia de si mesmo. Nenhuma ação realizada.\n";
+        return;
+    }
+    currentSize = other.currentSize;
+    capacity = other.capacity;
+    for (int i = 0; i < currentSize; ++i) {
+        data[i] = other.data[i];
+    }
+}
+
+void Vector::shuffle(int numBreaks) noexcept {
+    if (numBreaks < 0 || numBreaks >= currentSize) {
+        std::cerr << "Erro: número de quebras inválido.\n";
+        return;
+    }
+    for (int i = 0; i < numBreaks; ++i) {
+        // * Gera dois índices aleatórios para trocar os elementos
+        int index1 = rand() % currentSize;
+        int index2 = rand() % currentSize;
+        swap(index1, index2);
+    }
 }

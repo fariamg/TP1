@@ -30,7 +30,8 @@ class Vector {
     //@ Adiciona um valor ao final do vetor, se houver espaço
     void push_back(int value) noexcept;
 
-    ////void pop_back();
+    // @ Preenche todo o vetor com numeros ordenados
+    void fill() noexcept; 
 
     //@ Retorna se o vetor está vazio
     bool isEmpty() const noexcept;
@@ -43,4 +44,10 @@ class Vector {
 
     //@ Troca os valores entre dois índices válidos
     void swap(int index1, int index2);
+
+    //@ Copia o vetor atual para outro vetor
+    void copy(const Vector& other) noexcept;
+
+    //@ Embaralha o vetor, de acordo com o número de quebras
+    void shuffle(int numBreaks) noexcept;
 };
