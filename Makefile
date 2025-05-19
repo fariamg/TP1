@@ -1,6 +1,6 @@
 CXX        := g++
 CXXFLAGS   := -std=c++17 -Wall -Iinclude -O2
-SRCDIRS    := src/app src/datastructures src/algorithms src/measurement
+SRCDIRS    := src/app src/datastructures src/algorithms src/measurement src/core
 SOURCES    := $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
 OBJDIR     := obj
 BINDIR     := bin
