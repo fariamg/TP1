@@ -6,6 +6,8 @@ int median(int a, int b, int c);
 void partition(Vector& V, int l, int r, int& i, int& j, Statistics& stats);
 
 void quickSort(Vector& V, int partitionSize, int l, int r, Statistics& stats) {
+    stats.setAlgorithmName("qs");
+    
     stats.incrementFunctionCalls(1); // Incrementa chamadas de função
 
     // Caso base
