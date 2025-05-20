@@ -9,10 +9,13 @@ class Statistics {
     int comparisons;   //* Número de comparações
     int movements;     //* Número de movimentações
     int functionCalls; //* Número de chamadas de função
-                       //// std::string algorithmName; //* Algoritmo utilizado
+    float cost;
+    // int a, b,c; //? Provavelemente vou colocar isso no benchmark (pois é uma característica do ambiente a ser medido)
+    int MPS;
+    std::string algorithmName; //* Algoritmo utilizado
 
   public:
-    // static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
+    static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
 
     //@ Construtor padrão explícito (evita conversões implícitas)
     explicit Statistics();
@@ -35,9 +38,27 @@ class Statistics {
     //@ Retorna o número total de chamadas de função
     int getFunctionCalls() const noexcept;
 
+    //@ Retorna o custo total
+    float getCost() const noexcept;
+
+    // @ Retorna o número de MPS
+    int getMPS() const noexcept;
+
+    //@ Define o número de MPS
+    void setMPS(int mps) noexcept;
+
+    //@ Define o custo total
+    void calculateCost(int a, int b, int c) noexcept;
+
+    ///@ Retorna o nome do algoritmo
+    const std::string& getAlgorithmName() const noexcept;
+
+    //@ Define o nome do algoritmo
+    void setAlgorithmName(const std::string& name) noexcept;
+
     //@ Printa na saída padrão as estatísticas
     void print() const noexcept;
 
-    /////@ Retorna o nome do algoritmo
-    ////const std::string& getAlgorithmName() const noexcept;
+    //@ Limpa as estatísticas
+    void clear() noexcept;
 };
