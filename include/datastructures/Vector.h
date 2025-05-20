@@ -4,7 +4,7 @@
 
 static constexpr size_t MAX_SIZE = 1000;
 
-//@ Estrutura de dados para armazenar um vetor de inteiros
+//@ Estrutura de dados para armazenar tipo inteiro
 class Vector {
   private:
     int data[MAX_SIZE];
