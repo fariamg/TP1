@@ -30,7 +30,7 @@ int Vector::getElement(int index) const {
     return data[index];
 }
 
-int Vector::getCurrentSize() const noexcept{
+int Vector::getCurrentSize() const noexcept {
     return currentSize;
 }
 
@@ -51,12 +51,13 @@ void Vector::setElement(int index, int value) {
     data[index] = value;
 }
 
-void Vector::push_back(int value) noexcept{
+void Vector::push_back(int value) noexcept {
     if (currentSize >= capacity) {
         std::cerr << "Erro: vetor cheio. push_back falhou.\n";
         return;
     }
-    data[currentSize++] = value;
+    data[currentSize] = value;
+    this->currentSize++;
 }
 
 void Vector::fill() noexcept {
@@ -65,7 +66,7 @@ void Vector::fill() noexcept {
     }
 }
 
-bool Vector::isEmpty() const noexcept{
+bool Vector::isEmpty() const noexcept {
     return currentSize == 0;
 }
 
@@ -97,15 +98,18 @@ void Vector::swap(int index1, int index2) {
     data[index2] = temp;
 }
 
-void Vector::copy(const Vector& other) noexcept {
+void Vector::copy(Vector& other) noexcept {
     if (this == &other) {
         std::cerr << "Aviso: cópia de si mesmo. Nenhuma ação realizada.\n";
         return;
     }
-    currentSize = other.currentSize;
-    capacity = other.capacity;
+    if (other.capacity < this->currentSize) {
+        std::cerr << "Erro: capacidade insuficiente no vetor de destino. Cópia não realizada.\n";
+        return;
+    }
+    other.currentSize = this->currentSize;
     for (int i = 0; i < currentSize; ++i) {
-        data[i] = other.data[i];
+        other.data[i] = this->data[i]; // Copia diretamente para o array
     }
 }
 
