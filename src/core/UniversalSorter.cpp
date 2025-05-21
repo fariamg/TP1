@@ -6,26 +6,26 @@
 #include "core/UniversalSorter.h"
 #include "measurement/Statistics.h"
 
-UniversalSorter::UniversalSorter(Vector& V) : stats(), V(V) {}
+UniversalSorter::UniversalSorter(Vector& V) : V(V) {}
 
-Statistics UniversalSorter::getStats() const noexcept {
-    return this->stats;
-}
+// Statistics UniversalSorter::getStats() const noexcept {
+//      return this->stats;
+//  }
 
-void UniversalSorter::sort(Vector& V, int minPartitionSize, int breakLimit) {
+void UniversalSorter::sort(Vector& V, int minPartitionSize, int breakLimit, Statistics& stats) {
     int vectorSize = V.getCurrentSize();
     int vectorBreaks = V.getNumBreaks();
 
     if (vectorBreaks < breakLimit) {
         //* Vetor "quase ordenado" utiliza InsertionSort
-        insertionSort(V, 0, vectorSize - 1, this->stats);
+        insertionSort(V, 0, vectorSize - 1, stats);
     } else {
         if (vectorSize > minPartitionSize) {
             //* Já se tiver muitas quebras e o tamanho do vetor for maior que o tamanho mínimo de partição usa QuickSort
-            quickSort(V, minPartitionSize, 0, vectorSize - 1, this->stats);
+            quickSort(V, minPartitionSize, 0, vectorSize - 1, stats);
         } else {
             // * Já se for menor ou igual utiliza InsertionSort (em vetores pequenos, a sobrecarga do quicksort não compensa)
-            insertionSort(V, 0, vectorSize - 1, this->stats);
+            insertionSort(V, 0, vectorSize - 1, stats);
         }
     }
 }
@@ -41,10 +41,10 @@ int UniversalSorter::determinePartitionThreshold(int costThreshold, double a, do
     if (rangeMPS == 0)
         rangeMPS = 1;
 
-    int partitionThreshold = minMPS; // * Inicializa o melhor limiar de partição
-    int diffCusto = 0;               // * Diff Custo é a diferença de custo entre os extremos dos valores de tamanho de partição
-    Statistics stats[6];             // * Array para armazenar as stats de cada iteração
-    int iter = 0;                    // * Contador de iterações
+    int partitionThreshold; // * Inicializa o melhor limiar de partição
+    int diffCusto;          // * Diff Custo é a diferença de custo entre os extremos dos valores de tamanho de partição
+    Statistics stats[6];    // * Array para armazenar as stats de cada iteração
+    int iter = 0;           // * Contador de iterações
 
     // ! Coloquei esse do-while para não precisar inicializar o diffCusto com um valor arbitrariamente grande
     do {
@@ -55,34 +55,33 @@ int UniversalSorter::determinePartitionThreshold(int costThreshold, double a, do
 
         for (int t = minMPS; t <= maxMPS; t += rangeMPS) {
             // * Cria-se um vetor do tamanho do vetor original (desalocado após sair do escopo)
-            //std::cout <<  V.getCurrentSize() << "esse é o tamanho do vetor orginial"; // ! Isso vai para o benchmark
             Vector VCopy(V.getCurrentSize());
 
             // * Copia o vetor original para o vetor auxiliar
             V.copy(VCopy);
 
             // * Ordena o vetor com o tamanho de partição t
-            this->sort(VCopy, t, V.getCurrentSize() - 1);
+            this->sort(VCopy, t, V.getCurrentSize() - 1, stats[numMPS]);
 
             // * Define o tamanho de partição
-            this->stats.setMPS(t);
+            stats[t].setMPS(t);
 
             // * Calcula o custo do vetor ordenado
-            this->stats.calculateCost(a, b, c);
+            stats[t].calculateCost(a, b, c);
 
-            // * Armazena as stats na posição correspondente
-            stats[numMPS] = this->stats;
+            // // * Armazena as stats na posição correspondente
+            // stats[numMPS] = this->stats;
 
             // * Printa as estatísticas do vetor ordenado
             stats[numMPS].print(); //! Isso vai para o benchmark
 
             // * Limpa as estatísticas
-            this->stats.clear();
+            // this->stats.clear();
 
             // * Incrementa o número de tamanhos de partição
             numMPS++;
 
-            //VCopy.print(); //
+            // VCopy.print(); //
 
             VCopy.clear();
         }
@@ -114,7 +113,75 @@ int UniversalSorter::determinePartitionThreshold(int costThreshold, double a, do
 }
 
 // ! SEED E LIMIAR DE CUSTO SÃO PARAMETROS DO BENCHMARK
-// int determineBreaksThreshold(int seed, int costThreshold, int minPartitionSize) {}
+int UniversalSorter::determineBreaksThreshold(int seed, int costThreshold, int minPartitionSize, int a, int b, int c) {
+    int minMBS = 2;                      // * Tamanhos 0 e 1 já estão ordenados
+    int maxMBS = V.getCurrentSize() / 2; // * Tamanho de partição até o tamanho maximo do vetor
+    int rangeMBS = (int)(maxMBS - minMBS) / 5;
+    int numMBS; // * Número de quebras
+
+    if (rangeMBS == 0)
+        rangeMBS = 1;
+
+    int diffCusto;       // * Diff Custo é a diferença de custo entre os extremos dos valores de tamanho de partição
+    int breaksThreshold; // * Inicializa o melhor limiar de quebras
+
+    Statistics QSstats[6]; // * Array para armazenar as stats do QuickSort de cada iteração
+    Statistics ISstats[6]; // * Array para armazenar as stats do InsertionSort de cada iteração
+
+    int iter = 0; // * Contador de iterações
+
+    do {
+        std::cout << "iter " << iter << "\n";
+
+        numMBS = 0;
+
+        for (int t = minMBS; t <= maxMBS; t += rangeMBS) {
+            Vector VCopy1(V.getCurrentSize());
+            V.copy(VCopy1);
+
+            Vector VCopy2(V.getCurrentSize());
+            V.copy(VCopy2);
+
+            VCopy1.shuffle(t); // * Embaralha o vetor original
+            VCopy2.shuffle(t); // * Embaralha o vetor original
+
+            quickSort(VCopy1, minPartitionSize, 0, V.getCurrentSize() - 1, QSstats[numMBS]);
+            insertionSort(VCopy2, 0, V.getCurrentSize() - 1, ISstats[numMBS]);
+
+            QSstats[numMBS].setMPS(t);
+            ISstats[numMBS].setMPS(t);
+
+            QSstats[numMBS].calculateCost(a, b, c);
+            ISstats[numMBS].calculateCost(a, b, c);
+
+            QSstats[numMBS].print(); // ! Isso vai para o benchmark
+            ISstats[numMBS].print(); // ! Isso vai para o benchmark
+
+            numMBS++;
+
+            VCopy1.clear();
+            VCopy2.clear();
+        }
+
+        int minCostIdx = minCostIndex(ISstats, QSstats, numMBS);
+
+        this->calculateNewRange(minCostIdx, minMBS, maxMBS, rangeMBS, numMBS);
+
+        diffCusto = ISstats[0].getCost() - ISstats[numMBS - 1].getCost();
+        if (diffCusto < 0) {
+            diffCusto = -diffCusto; // * Se o valor for negativo, transforma em positivo
+        }
+
+        breaksThreshold = ISstats[minCostIdx].getMPS();
+
+        iter++;
+
+        this->printIterStats(numMBS, breaksThreshold, diffCusto); // ! Isso vai para o benchmark
+
+        std::cout << std::endl // ! Isso vai para o benchmark
+    } while ((diffCusto > costThreshold) && (numMBS >= 5));
+    return breaksThreshold; // * Retorna o melhor limiar de quebras
+}
 
 void UniversalSorter::calculateNewRange(int partitionThreshold, int& minMPS, int& maxMPS, int& rangeMPS, int numMPS) {
     if (partitionThreshold == 0) {
@@ -144,20 +211,15 @@ int UniversalSorter::minCostIndex(Statistics stats[], int numMPS) {
     return minCostIndex;
 }
 
-// int UniversalSorter::minCostIndex(Statistics stats[], float quickCosts[], int numMQS) {
-//     int minIndex = 0;
-//     float minDiff = std::fabs(insertCosts[0] - quickCosts[0]);
-
-//     for (int i = 1; i < numMQS; i++) {
-//         float diff = std::fabs(insertCosts[i] - quickCosts[i]);
-//         if (diff < minDiff) {
-//             minDiff = diff;
-//             minIndex = i;
-//         }
-//     }
-
-//     return minIndex;
-// }
+int UniversalSorter::minCostIndex(Statistics stats1[], Statistics stats2[], int numMBS) {
+    int minCostIndex = 0;
+    for (int i = 1; i < V.getCurrentSize(); i++) {
+        if (fabs(stats1[i].getCost() - stats2[i].getCost()) < fabs(stats1[minCostIndex].getCost() - stats2[minCostIndex].getCost())) {
+            minCostIndex = i;
+        }
+    }
+    return minCostIndex;
+}
 
 void UniversalSorter::printIterStats(int numMPS, int partitionThreshold, float MPSDiff) {
     std::cout << "nummps " << numMPS << " limParticao " << partitionThreshold << " mpsdiff " << MPSDiff << "\n";

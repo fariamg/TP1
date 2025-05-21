@@ -108,7 +108,8 @@ int main() {
     //     for (int i = 0; i < 6; ++i) {
     //         int mps = 2 + i * (tam / 5); // Exemplo de cálculo de mps
     //         double cost =
-    //             coefA * sorter.getStats().getComparisons() + coefB * sorter.getStats().getMovements() + coefC * sorter.getStats().getFunctionCalls();
+    //             coefA * sorter.getStats().getComparisons() + coefB * sorter.getStats().getMovements() + coefC *
+    //             sorter.getStats().getFunctionCalls();
 
     //         std::cout << "mps " << mps << " cost " << std::fixed << std::setprecision(9) << cost << " cmp " << sorter.getStats().getComparisons()
     //                   << " move " << sorter.getStats().getMovements() << " calls " << sorter.getStats().getFunctionCalls() << "\n";
@@ -124,32 +125,61 @@ int main() {
     // }
 
     // Define os parâmetros para o teste
-    int vectorCapacity = 100;         // Tamanho do vetor
-    int costThreshold = 10;           // Limiar de custo
-    double a = 1.0, b = 1.0, c = 1.0; // Parâmetros para calcular o custo
+    //     int vectorCapacity = 100;         // Tamanho do vetor
+    //     int costThreshold = 10;           // Limiar de custo
+    //     double a = 1.0, b = 1.0, c = 1.0; // Parâmetros para calcular o custo
 
-    Vector V(vectorCapacity); // Cria o vetor com o tamanho definido
+    //     Vector V(vectorCapacity); // Cria o vetor com o tamanho definido
 
-    // Preenche o vetor com números aleatórios
-    for (int i = 0; i < vectorCapacity; ++i) {
-        V.push_back(rand() % 10000); // Preenche com números aleatórios
+    //     // Preenche o vetor com números aleatórios
+    //     for (int i = 0; i < vectorCapacity; ++i) {
+    //         V.push_back(rand() % 10000); // Preenche com números aleatórios
+    //     }
+
+    //     // Cria o objeto UniversalSorter
+    //     UniversalSorter sorter(V);
+
+    //     // Imprime o vetor inicial
+    //     std::cout << "Vetor inicial:\n";
+
+    //     // Determina o limiar de partição
+    //     int partitionThreshold = sorter.determinePartitionThreshold(costThreshold, a, b, c);
+
+    //     // Imprime o resultado
+    //     std::cout << "Limiar de partição determinado: " << partitionThreshold << "\n";
+
+    //     // Imprime o vetor após a ordenação
+    //     std::cout << "Vetor após a ordenação:\n";
+    //     sorter.V.print();
+
+    //     return 0;
+    int seed = 42;            // Semente para embaralhamento
+    int costThreshold = 10;   // Limiar de custo
+    int minPartitionSize = 5; // Tamanho mínimo de partição
+    int a = 1, b = 1, c = 1;  // Pesos para cálculo de custo
+    int vectorSize = 100;     // Tamanho do vetor
+
+    // Inicializa o gerador de números aleatórios
+    std::srand(seed);
+
+    // Cria o vetor e preenche com valores aleatórios
+    Vector V(vectorSize);
+    for (int i = 0; i < vectorSize; ++i) {
+        V.push_back(i); // Valores aleatórios entre 0 e 99
     }
-
-    // Cria o objeto UniversalSorter
-    UniversalSorter sorter(V);
 
     // Imprime o vetor inicial
     std::cout << "Vetor inicial:\n";
+    V.print();
 
-    // Determina o limiar de partição
-    int partitionThreshold = sorter.determinePartitionThreshold(costThreshold, a, b, c);
+    // Cria o UniversalSorter
+    UniversalSorter sorter(V);
+
+    // Calcula o limiar de quebras
+    int breaksThreshold = sorter.determineBreaksThreshold(seed, costThreshold, minPartitionSize, a, b, c);
 
     // Imprime o resultado
-    std::cout << "Limiar de partição determinado: " << partitionThreshold << "\n";
-
-    // Imprime o vetor após a ordenação
-    std::cout << "Vetor após a ordenação:\n";
-    sorter.V.print();
+    std::cout << "\nLimiar de quebras determinado: " << breaksThreshold << "\n";
 
     return 0;
 }
