@@ -16,7 +16,7 @@ class UniversalSorter {
     Statistics getStats() const noexcept;
 
     //@ Método para ordenar o vetor
-    void sort(int minPartitionSize, int breakLimit);
+    void sort(Vector &V, int minPartitionSize, int breakLimit);
 
     //@ Método para determinar o limite de partição para o QuickSort ser mais eficiente
     int determinePartitionThreshold(int costThreshold, double a, double b, double c);
@@ -27,9 +27,11 @@ class UniversalSorter {
     //@ Método para calcular o novo intervalo
     void calculateNewRange(int partitionThreshold, int& minMPS, int& maxMPS, int& rangeMPS, int numMPS);
 
-    // @ Metodo que calcula o menor custo
-    int minCostIndex(float costs[], int numMPS);
+    int minCostIndex(Statistics stats[], int numMPS);
+
+    int minCostIndex(float insertCosts[], float quickCosts[], int numMQS);
 
     //@ Método para imprimir as estatísticas de cada iteração
     void printIterStats(int numMPS, int partitionThreshold, float MPSDiff);
+
 };
