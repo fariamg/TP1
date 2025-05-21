@@ -178,7 +178,7 @@ int UniversalSorter::determineBreaksThreshold(int seed, int costThreshold, int m
 
         this->printIterStats(numMBS, breaksThreshold, diffCusto); // ! Isso vai para o benchmark
 
-        std::cout << std::endl // ! Isso vai para o benchmark
+        std::cout << std::endl; // ! Isso vai para o benchmark
     } while ((diffCusto > costThreshold) && (numMBS >= 5));
     return breaksThreshold; // * Retorna o melhor limiar de quebras
 }

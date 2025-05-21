@@ -2,7 +2,7 @@
 
 #include <iterator>
 
-static constexpr size_t MAX_SIZE = 1000;
+static constexpr size_t MAX_SIZE = 10000;
 
 //@ Estrutura de dados para armazenar tipo inteiro
 class Vector {
@@ -17,7 +17,7 @@ class Vector {
 
     //@ Retorna o elemento em uma posição válida ou lança exceção
     int getElement(int index) const;
-    
+
     //@ Retorna o tamanho atual do vetor
     int getCurrentSize() const noexcept;
 
@@ -31,7 +31,7 @@ class Vector {
     void push_back(int value) noexcept;
 
     // @ Preenche todo o vetor com numeros ordenados
-    void fill() noexcept; 
+    void fill() noexcept;
 
     //@ Retorna se o vetor está vazio
     bool isEmpty() const noexcept;
