@@ -130,13 +130,13 @@ int main() {
 
     Vector V(vectorCapacity); // Cria o vetor com o tamanho definido
 
+    // Preenche o vetor com números aleatórios
+    for (int i = 0; i < vectorCapacity; ++i) {
+        V.push_back(rand() % 10000); // Preenche com números aleatórios
+    }
+
     // Cria o objeto UniversalSorter
     UniversalSorter sorter(V);
-
-    // Preenche o vetor com valores aleatórios
-    for (int i = 0; i < vectorCapacity; i++) {
-        sorter.V.push_back(rand() % 100); // Valores aleatórios entre 0 e 99
-    }
 
     // Imprime o vetor inicial
     std::cout << "Vetor inicial:\n";
