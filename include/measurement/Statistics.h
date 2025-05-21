@@ -6,12 +6,11 @@
 /// @ Cuida da coleta de estatísticas de execução do algoritmo
 class Statistics {
   private:
-    int comparisons;   //* Número de comparações
-    int movements;     //* Número de movimentações
-    int functionCalls; //* Número de chamadas de função
-    float cost;
-    // int a, b,c; //? Provavelemente vou colocar isso no benchmark (pois é uma característica do ambiente a ser medido)
-    int MPS;
+    int comparisons;           //* Número de comparações
+    int movements;             //* Número de movimentações
+    int functionCalls;         //* Número de chamadas de função
+    float cost;                // * Custo total
+    int MPS;                   //* Tamanho de partição
     std::string algorithmName; //* Algoritmo utilizado
 
   public:
