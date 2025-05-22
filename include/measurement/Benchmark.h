@@ -15,7 +15,7 @@ class Benchmark {
 
   public:
     //@ Construtor que recebe os coeficientes e parametros do benchmark
-    Benchmark(double a, double b, double c, int seed, int costThreshold) {}
-
+    Benchmark(double a, double b, double c, int seed, int costThreshold);
+    
     void run(Vector & V);
 };
