@@ -32,5 +32,5 @@ class UniversalSorter {
     int minCostIndex(Statistics stats1[], Statistics stats2[], int numMBS);
 
     //@ Método para imprimir as estatísticas de cada iteração
-    void printIterStats(int numMPS, int partitionThreshold, float MPSDiff);
+    void printIterStats(int numMPS, int partitionThreshold, double MPSDiff);
 };

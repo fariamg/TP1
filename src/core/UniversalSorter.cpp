@@ -221,6 +221,6 @@ int UniversalSorter::minCostIndex(Statistics stats1[], Statistics stats2[], int 
     return minCostIndex;
 }
 
-void UniversalSorter::printIterStats(int numMPS, int partitionThreshold, float MPSDiff) {
+void UniversalSorter::printIterStats(int numMPS, int partitionThreshold, double MPSDiff) {
     std::cout << "nummps " << numMPS << " limParticao " << partitionThreshold << " mpsdiff " << MPSDiff << "\n";
 }
