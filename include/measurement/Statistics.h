@@ -9,7 +9,7 @@ class Statistics {
     int comparisons;           //* Número de comparações
     int movements;             //* Número de movimentações
     int functionCalls;         //* Número de chamadas de função
-    float cost;                // * Custo total
+    double cost;               // * Custo total
     int MPS;                   //* Tamanho de partição
     std::string algorithmName; //* Algoritmo utilizado
 
@@ -38,7 +38,7 @@ class Statistics {
     int getFunctionCalls() const noexcept;
 
     //@ Retorna o custo total
-    float getCost() const noexcept;
+    double getCost() const noexcept;
 
     // @ Retorna o número de MPS
     int getMPS() const noexcept;

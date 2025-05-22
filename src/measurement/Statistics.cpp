@@ -31,7 +31,7 @@ const std::string& Statistics::getAlgorithmName() const noexcept {
     return this->algorithmName;
 }
 
-float Statistics::getCost() const noexcept {
+double Statistics::getCost() const noexcept {
     return this->cost;
 }
 
@@ -48,7 +48,8 @@ void Statistics::calculateCost(int a, int b, int c) noexcept {
 }
 
 void Statistics::print() const noexcept {
-    std::cout << this->getAlgorithmName() << " mps " << this->MPS << " cost " << this->cost <<  " cmp " << this->comparisons << " move " << this->movements << " calls " << this->functionCalls << std::endl;
+    std::cout << this->getAlgorithmName() << " mps " << this->MPS << " cost " << this->cost << " cmp " << this->comparisons << " move "
+              << this->movements << " calls " << this->functionCalls << std::endl;
 }
 
 void Statistics::clear() noexcept {
@@ -56,7 +57,6 @@ void Statistics::clear() noexcept {
     this->movements = 0;
     this->functionCalls = 0;
 }
-
 
 void Statistics::setAlgorithmName(const std::string& name) noexcept {
     if (name.size() > ALGORITHM_NAME_SIZE) {
