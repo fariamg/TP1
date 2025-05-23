@@ -64,13 +64,16 @@ int UniversalSorter::determinePartitionThreshold(double costThreshold, double a,
             V.copy(VCopy);
 
             // * Ordena o vetor com o tamanho de partição t
-            this->sort(VCopy, 1, 1, stats[numMPS]);
+            this->sort(VCopy, t, 1, stats[numMPS]);
 
             // * Define o tamanho de partição
             stats[numMPS].setMPS(t);
 
             // * Calcula o custo do vetor ordenado
             stats[numMPS].calculateCost(a, b, c);
+
+            //std::cout << "DEBUG - t=" << t << " cmp=" << stats[numMPS].getComparisons() << " mov=" << stats[numMPS].//getMovements()
+                      //<< " calls=" << stats[numMPS].getFunctionCalls() << " cost=" << stats[numMPS].getCost() << std::endl;
 
             // // * Armazena as stats na posição correspondente
             // stats[numMPS] = this->stats;
@@ -139,11 +142,10 @@ int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, in
             V.copy(VCopy1);
             V.copy(VCopy2);
 
-            srand48(seed);     // * Semente para o gerador de números aleatórios
-            VCopy1.shuffle(t); // * Embaralha o vetor original
-
-            srand48(seed);     // * Semente para o gerador de números aleatórios
-            VCopy2.shuffle(t); // * Embaralha o vetor original
+            srand48(seed);
+            VCopy1.shuffle(t);
+            srand48(seed);
+            VCopy2.shuffle(t);
 
             quickSort(VCopy1, minPartitionSize, 0, V.getCurrentSize() - 1, QSstats[numMBS]);
             QSstats[numMBS].setMPS(t);
@@ -153,15 +155,12 @@ int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, in
             ISstats[numMBS].setMPS(t);
             ISstats[numMBS].calculateCost(a, b, c);
 
-            std::cout << "qs lq " << QSstats[numMBS].getMPS() << " cost " << std::fixed << std::setprecision(9) << QSstats[numMBS].getCost()
-                      << " cmp " << QSstats[numMBS].getComparisons() << " move " << QSstats[numMBS].getMovements() << " calls "
+            std::cout << "qs lq " << t << " cost " << std::fixed << std::setprecision(9) << QSstats[numMBS].getCost() << " cmp "
+                      << QSstats[numMBS].getComparisons() << " move " << QSstats[numMBS].getMovements() << " calls "
                       << QSstats[numMBS].getFunctionCalls() << "\n";
 
-            insertionSort(VCopy2, 0, V.getCurrentSize() - 1, ISstats[numMBS]);
-            ISstats[numMBS].setMPS(t);
-            ISstats[numMBS].calculateCost(a, b, c);
-            std::cout << "in lq " << ISstats[numMBS].getMPS() << " cost " << std::fixed << std::setprecision(9) << ISstats[numMBS].getCost()
-                      << " cmp " << ISstats[numMBS].getComparisons() << " move " << ISstats[numMBS].getMovements() << " calls "
+            std::cout << "in lq " << t << " cost " << std::fixed << std::setprecision(9) << ISstats[numMBS].getCost() << " cmp "
+                      << ISstats[numMBS].getComparisons() << " move " << ISstats[numMBS].getMovements() << " calls "
                       << ISstats[numMBS].getFunctionCalls() << "\n";
 
             numMBS++;
@@ -221,15 +220,17 @@ int UniversalSorter::minCostIndex(Statistics stats[], int numMPS) {
 }
 
 int UniversalSorter::minCostIndex(Statistics stats1[], Statistics stats2[], int numMBS) {
-    int minCostIndex = 0;
+    int min = 0;
     for (int i = 1; i < numMBS; i++) {
-        if (fabs(stats1[i].getCost() - stats2[i].getCost()) < fabs(stats1[minCostIndex].getCost() - stats2[minCostIndex].getCost())) {
-            minCostIndex = i;
+        double currentDiff = fabs(stats1[i].getCost() - stats2[i].getCost());
+        double minDiff = fabs(stats1[min].getCost() - stats2[min].getCost());
+        if (currentDiff < minDiff) {
+            min = i;
         }
     }
-    return minCostIndex;
+    return min;
 }
 
 void UniversalSorter::printIterStats(int numMPS, int partitionMPS, double MPSDiff) {
-    std::cout << "nummps " << numMPS << " limParticao " << partitionMPS << " mpsdiff " << MPSDiff << "\n";
+    std::cout << std::fixed << std::setprecision(6) << "nummps " << numMPS << " limParticao " << partitionMPS << " mpsdiff " << MPSDiff << "\n";
 }
