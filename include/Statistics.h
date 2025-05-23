@@ -38,13 +38,15 @@ class Statistics {
     int getFunctionCalls() const noexcept;
 
     //@ Retorna o custo total
-    double getCost() const noexcept;
+    float getCost() const noexcept;
 
     // @ Retorna o número de MPS
     int getMPS() const noexcept;
 
     //@ Define o número de MPS
     void setMPS(int mps) noexcept;
+
+    void resetStats() noexcept;
 
     //@ Define o custo total
     void calculateCost(double a, double b, double c) noexcept;
