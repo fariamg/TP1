@@ -62,11 +62,10 @@ void partition(Vector& V, int l, int r, int& i, int& j, Statistics& stats) {
         // Se eles não se cruzaram ainda, faz a troca e anda +1 posição com i e j.
         if (i <= j) {
             V.swap(i, j);
-            stats.incrementMovements(2); // Incrementa movimentações (swap conta como 2 movimentos)
+            stats.incrementMovements(3); // Incrementa movimentações (swap conta como 3 movimentos)
             i++;
             j--;
         }
-
     } while (i <= j);
 }
 

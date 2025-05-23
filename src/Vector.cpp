@@ -119,9 +119,12 @@ void Vector::shuffle(int numBreaks) noexcept {
         return;
     }
     for (int i = 0; i < numBreaks; ++i) {
-        // * Gera dois índices aleatórios para trocar os elementos
-        int index1 = rand() % currentSize;
-        int index2 = rand() % currentSize;
+        int index1 = 0, index2 = 0;
+        // Gera dois índices distintos
+        while (index1 == index2) {
+            index1 = rand() % currentSize;
+            index2 = rand() % currentSize;
+        }
         swap(index1, index2);
     }
 }
