@@ -1,5 +1,6 @@
 #include "Statistics.h"
 #include <string>
+#include <iomanip>
 
 Statistics::Statistics() : comparisons(0), movements(0), functionCalls(0) {}
 
@@ -31,8 +32,14 @@ const std::string& Statistics::getAlgorithmName() const noexcept {
     return this->algorithmName;
 }
 
-double Statistics::getCost() const noexcept {
+float Statistics::getCost() const noexcept {
     return this->cost;
+}
+
+void Statistics::resetStats() noexcept {
+    this->comparisons = 0;
+    this->movements = 0;
+    this->functionCalls = 0;
 }
 
 int Statistics::getMPS() const noexcept {
@@ -48,7 +55,7 @@ void Statistics::calculateCost(double a, double b, double c) noexcept {
 }
 
 void Statistics::print() const noexcept {
-    std::cout << this->getAlgorithmName() << " mps " << this->MPS << " cost " << this->cost << " cmp " << this->comparisons << " move "
+    std::cout << std::fixed << std::setprecision(9) << "mps " << this->MPS << " cost " << this->cost << " cmp " << this->comparisons << " move "
               << this->movements << " calls " << this->functionCalls << std::endl;
 }
 
