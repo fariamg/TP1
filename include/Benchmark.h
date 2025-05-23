@@ -1,8 +1,8 @@
 #pragma once
 
-#include "datastructures/Vector.h"
-#include "measurement/Statistics.h"
-#include "measurement/Timer.h"
+#include "Statistics.h"
+#include "Timer.h"
+#include "Vector.h"
 
 //@ Cuida da execução do algoritmo, medindo o tempo e coletando estatísticas
 class Benchmark {
@@ -16,6 +16,6 @@ class Benchmark {
   public:
     //@ Construtor que recebe os coeficientes e parametros do benchmark
     Benchmark(double a, double b, double c, int seed, int costThreshold);
-    
-    void run(Vector & V);
+
+    void run(Vector& V);
 };

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "datastructures/Vector.h"
-#include "measurement/Statistics.h"
+#include "Statistics.h"
+#include "Vector.h"
 
 class UniversalSorter {
   private:

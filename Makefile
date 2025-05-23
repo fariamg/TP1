@@ -1,25 +1,30 @@
-CXX        := g++
-CXXFLAGS   := -std=c++17 -Wall -Iinclude -O2
-SRCDIRS    := src/app src/datastructures src/algorithms src/measurement src/core
-SOURCES    := $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
-OBJDIR     := obj
-BINDIR     := bin
-BINARY     := $(BINDIR)/tp1
-OBJECTS    := $(patsubst src/%.cpp,$(OBJDIR)/%.o,$(SOURCES))
+CC = g++
+CFLAGS = -g -Wall -Wextra -Iinclude -g
 
-.PHONY: all clean
+SRC_DIR = src
+INC_DIR = include
+OBJ_DIR = obj
+BIN_DIR = bin
 
-all: $(BINARY)
+# Busca recursiva por arquivos .cpp
 
-# Link
-$(BINARY): $(OBJECTS)
-	mkdir -p $(BINDIR)
-	$(CXX) $(CXXFLAGS) $^ -o $@
-	
-# Compile
-$(OBJDIR)/%.o: src/%.cpp
-	mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
+
+TARGET = $(BIN_DIR)/tp1.out
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
+
+run: all
+	./$(TARGET)

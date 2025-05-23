@@ -1,5 +1,5 @@
-#include "measurement/Benchmark.h"
-#include "core/UniversalSorter.h"
+#include "Benchmark.h"
+#include "UniversalSorter.h"
 
 Benchmark::Benchmark(double a, double b, double c, int seed, int costThreshold)
     : timer(), a(a), b(b), c(c), seed(seed), costThreshold(costThreshold) {}
@@ -27,9 +27,9 @@ void Benchmark::run(Vector& V) {
     timer.stop();
 
     // Imprime o tempo decorrido
-    std::cout << "Tempo decorrido: " << timer.elapsedSeconds() << " segundos\n";
+    //std::cout << "Tempo decorrido: " << timer.elapsedSeconds() << " segundos\n";
 
     // Imprime o vetor ordenado
-    std::cout << "Vetor ordenado:\n";
+    //std::cout << "Vetor ordenado:\n";
     V.print();
 }

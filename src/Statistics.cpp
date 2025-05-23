@@ -1,4 +1,4 @@
-#include "measurement/Statistics.h"
+#include "Statistics.h"
 #include <string>
 
 Statistics::Statistics() : comparisons(0), movements(0), functionCalls(0) {}

@@ -1,10 +1,10 @@
 #include <algorithm>
 #include <cmath>
 
-#include "algorithms/InsertionSort.h"
-#include "algorithms/QuickSort.h"
-#include "core/UniversalSorter.h"
-#include "measurement/Statistics.h"
+#include "InsertionSort.h"
+#include "QuickSort.h"
+#include "Statistics.h"
+#include "UniversalSorter.h"
 
 UniversalSorter::UniversalSorter(Vector& V) : V(V) {}
 

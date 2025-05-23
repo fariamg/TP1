@@ -1,4 +1,4 @@
-#include "datastructures/Vector.h"
+#include "Vector.h"
 
 #include <iostream>
 #include <stdexcept>
