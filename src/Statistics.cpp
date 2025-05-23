@@ -43,7 +43,7 @@ void Statistics::setMPS(int mps) noexcept {
     this->MPS = mps;
 }
 
-void Statistics::calculateCost(int a, int b, int c) noexcept {
+void Statistics::calculateCost(double a, double b, double c) noexcept {
     this->cost = (a * this->comparisons + b * this->movements + c * this->functionCalls);
 }
 

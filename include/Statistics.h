@@ -17,7 +17,7 @@ class Statistics {
     static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
 
     //@ Construtor padrão explícito (evita conversões implícitas)
-    explicit Statistics();
+    Statistics();
 
     //@ Incrementa o número de comparações
     void incrementComparisons(int cmp) noexcept;
@@ -47,7 +47,7 @@ class Statistics {
     void setMPS(int mps) noexcept;
 
     //@ Define o custo total
-    void calculateCost(int a, int b, int c) noexcept;
+    void calculateCost(double a, double b, double c) noexcept;
 
     ///@ Retorna o nome do algoritmo
     const std::string& getAlgorithmName() const noexcept;
