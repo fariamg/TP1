@@ -1,6 +1,6 @@
 #include "Statistics.h"
-#include <string>
 #include <iomanip>
+#include <string>
 
 Statistics::Statistics() : comparisons(0), movements(0), functionCalls(0) {}
 
@@ -40,6 +40,8 @@ void Statistics::resetStats() noexcept {
     this->comparisons = 0;
     this->movements = 0;
     this->functionCalls = 0;
+    this->cost = 0.0;
+    this->MPS = 0;
 }
 
 int Statistics::getMPS() const noexcept {

@@ -63,6 +63,8 @@ int UniversalSorter::determinePartitionThreshold(double costThreshold, double a,
             // * Copia o vetor original para o vetor auxiliar
             V.copy(VCopy);
 
+            stats[numMPS].resetStats(); // * Reseta as estatísticas
+
             // * Ordena o vetor com o tamanho de partição t
             this->sort(VCopy, t, 1, stats[numMPS]);
 
@@ -72,8 +74,8 @@ int UniversalSorter::determinePartitionThreshold(double costThreshold, double a,
             // * Calcula o custo do vetor ordenado
             stats[numMPS].calculateCost(a, b, c);
 
-            //std::cout << "DEBUG - t=" << t << " cmp=" << stats[numMPS].getComparisons() << " mov=" << stats[numMPS].//getMovements()
-                      //<< " calls=" << stats[numMPS].getFunctionCalls() << " cost=" << stats[numMPS].getCost() << std::endl;
+            // std::cout << "DEBUG - t=" << t << " cmp=" << stats[numMPS].getComparisons() << " mov=" << stats[numMPS].//getMovements()
+            //<< " calls=" << stats[numMPS].getFunctionCalls() << " cost=" << stats[numMPS].getCost() << std::endl;
 
             // // * Armazena as stats na posição correspondente
             // stats[numMPS] = this->stats;
@@ -117,7 +119,7 @@ int UniversalSorter::determinePartitionThreshold(double costThreshold, double a,
 
 // ! SEED E LIMIAR DE CUSTO SÃO PARAMETROS DO BENCHMARK
 int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, int minPartitionSize, double a, double b, double c) {
-    int minMBS = 2;                      // * Tamanhos 0 e 1 já estão ordenados
+    int minMBS = 1;                      // * Tamanhos 0 e 1 já estão ordenados
     int maxMBS = V.getCurrentSize() / 2; // * Tamanho de partição até o tamanho maximo do vetor
     int rangeMBS = (maxMBS - minMBS) / 5;
     int numMBS = 5; // * Número de quebras
@@ -142,31 +144,35 @@ int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, in
             V.copy(VCopy1);
             V.copy(VCopy2);
 
+            Statistics qsStats, isStats; // Novas instâncias a cada iteração
+
             srand48(seed);
             VCopy1.shuffle(t);
             srand48(seed);
             VCopy2.shuffle(t);
 
-            quickSort(VCopy1, minPartitionSize, 0, V.getCurrentSize() - 1, QSstats[numMBS]);
-            QSstats[numMBS].setMPS(t);
-            QSstats[numMBS].calculateCost(a, b, c);
+            // QuickSort com estatísticas limpas
+            quickSort(VCopy1, minPartitionSize, 0, V.getCurrentSize() - 1, qsStats);
+            qsStats.setMPS(t);
+            qsStats.calculateCost(a, b, c);
 
-            insertionSort(VCopy2, 0, V.getCurrentSize() - 1, ISstats[numMBS]);
-            ISstats[numMBS].setMPS(t);
-            ISstats[numMBS].calculateCost(a, b, c);
+            // InsertionSort com estatísticas limpas
+            insertionSort(VCopy2, 0, V.getCurrentSize() - 1, isStats);
+            isStats.setMPS(t);
+            isStats.calculateCost(a, b, c);
 
-            std::cout << "qs lq " << t << " cost " << std::fixed << std::setprecision(9) << QSstats[numMBS].getCost() << " cmp "
-                      << QSstats[numMBS].getComparisons() << " move " << QSstats[numMBS].getMovements() << " calls "
-                      << QSstats[numMBS].getFunctionCalls() << "\n";
+            // Atualiza os arrays de estatísticas
+            QSstats[numMBS] = qsStats;
+            ISstats[numMBS] = isStats;
 
-            std::cout << "in lq " << t << " cost " << std::fixed << std::setprecision(9) << ISstats[numMBS].getCost() << " cmp "
-                      << ISstats[numMBS].getComparisons() << " move " << ISstats[numMBS].getMovements() << " calls "
-                      << ISstats[numMBS].getFunctionCalls() << "\n";
+            // Saída formatada
+            std::cout << "qs lq " << t << " cost " << std::fixed << std::setprecision(9) << qsStats.getCost() << " cmp " << qsStats.getComparisons()
+                      << " move " << qsStats.getMovements() << " calls " << qsStats.getFunctionCalls() << "\n";
+
+            std::cout << "in lq " << t << " cost " << std::fixed << std::setprecision(9) << isStats.getCost() << " cmp " << isStats.getComparisons()
+                      << " move " << isStats.getMovements() << " calls " << isStats.getFunctionCalls() << "\n";
 
             numMBS++;
-
-            VCopy1.clear();
-            VCopy2.clear();
         }
         int newMin = 0, newMax = 0;
 
