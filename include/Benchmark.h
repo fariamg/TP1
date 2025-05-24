@@ -11,11 +11,11 @@ class Benchmark {
     // * Esses atributos são específicos do Benchmark, pois podem variar a cada execução
     double a, b, c;
     int seed;
-    float costThreshold;
+    double costThreshold;
 
   public:
     //@ Construtor que recebe os coeficientes e parametros do benchmark
-    Benchmark(double a, double b, double c, int seed, float costThreshold);
+    Benchmark(double a, double b, double c, int seed, double costThreshold);
 
     void run(Vector& V);
 };

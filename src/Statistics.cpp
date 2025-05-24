@@ -32,7 +32,7 @@ const std::string& Statistics::getAlgorithmName() const noexcept {
     return this->algorithmName;
 }
 
-float Statistics::getCost() const noexcept {
+double Statistics::getCost() const noexcept {
     return this->cost;
 }
 

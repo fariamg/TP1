@@ -134,30 +134,40 @@ int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, in
     Statistics QSstats[10], ISstats[10]; // * Array para armazenar as stats dos algoritmos de cada iteração
 
     int iter = 0; // * Contador de iterações
+
     while ((diffCusto > costThreshold) && (numMBS >= 5)) {
         std::cout << "iter " << iter << "\n";
 
         numMBS = 0;
 
         for (int t = minMBS; t <= maxMBS; t += rangeMBS) {
+            // Create a base sorted vector (0 to N-1) for shuffling
+            Vector baseSortedVector(V.getCurrentSize());
+            for (int k = 0; k < V.getCurrentSize(); ++k) {
+                baseSortedVector.push_back(k); // Fills with 0, 1, ..., V.getCurrentSize()-1
+            }
+
             Vector VCopy1(V.getCurrentSize()), VCopy2(V.getCurrentSize());
-            V.copy(VCopy1);
-            V.copy(VCopy2);
+            baseSortedVector.copy(VCopy1); // VCopy1 is now sorted (0..N-1)
+            baseSortedVector.copy(VCopy2); // VCopy2 is now sorted (0..N-1)
 
-            Statistics qsStats, isStats; // Novas instâncias a cada iteração
-
-            srand48(seed);
-            VCopy1.shuffle(t);
-            srand48(seed);
-            VCopy2.shuffle(t);
+            Statistics qsStats, isStats;
+            qsStats.resetStats();
+            isStats.resetStats();
 
             // QuickSort com estatísticas limpas
-            quickSort(VCopy1, minPartitionSize, 0, V.getCurrentSize() - 1, qsStats);
+            srand48(seed);
+            VCopy1.shuffle(t); // Shuffle the sorted copy
+            srand48(seed);
+            VCopy2.shuffle(t); // Shuffle the sorted copy
+
+            // QuickSort com estatísticas limpas
+            quickSort(VCopy1, minPartitionSize, 0, VCopy1.getCurrentSize() - 1, qsStats);
             qsStats.setMPS(t);
             qsStats.calculateCost(a, b, c);
 
             // InsertionSort com estatísticas limpas
-            insertionSort(VCopy2, 0, V.getCurrentSize() - 1, isStats);
+            insertionSort(VCopy2, 0, VCopy2.getCurrentSize() - 1, isStats);
             isStats.setMPS(t);
             isStats.calculateCost(a, b, c);
 
@@ -226,15 +236,15 @@ int UniversalSorter::minCostIndex(Statistics stats[], int numMPS) {
 }
 
 int UniversalSorter::minCostIndex(Statistics stats1[], Statistics stats2[], int numMBS) {
-    int min = 0;
+    int minIdx = 0;
     for (int i = 1; i < numMBS; i++) {
-        double currentDiff = fabs(stats1[i].getCost() - stats2[i].getCost());
-        double minDiff = fabs(stats1[min].getCost() - stats2[min].getCost());
-        if (currentDiff < minDiff) {
-            min = i;
+        double curr = std::fabs(stats1[i].getCost() - stats2[i].getCost());
+        double best = std::fabs(stats1[minIdx].getCost() - stats2[minIdx].getCost());
+        if (curr < best) {
+            minIdx = i;
         }
     }
-    return min;
+    return minIdx;
 }
 
 void UniversalSorter::printIterStats(int numMPS, int partitionMPS, double MPSDiff) {
