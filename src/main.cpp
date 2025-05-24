@@ -38,8 +38,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::cout << "Seed: " << seed << "\nLimiarCusto: " << limiarCusto << "\na: " << a << "\nb: " << b << "\nc: " << c << "\nTamanho: " << tam << "\n";
-
     // Cria e preenche o vetor
     Vector V(tam);
     for (int i = 0; i < tam; ++i) {
@@ -51,9 +49,6 @@ int main(int argc, char* argv[]) {
         V.push_back(valor);
     }
 
-    // Imprime informações iniciais
-    int numQuebras = V.getNumBreaks();
-    std::cout << "\nTamanho: " << tam << "\nSeed: " << seed << "\nQuebras: " << numQuebras << "\n\n";
 
     // Executa o benchmark
     Benchmark benchmark(a, b, c, seed, limiarCusto);

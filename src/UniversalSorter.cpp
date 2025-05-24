@@ -158,6 +158,7 @@ int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, in
             // QuickSort com estatísticas limpas
             srand48(seed);
             VCopy1.shuffle(t); // Shuffle the sorted copy
+
             srand48(seed);
             VCopy2.shuffle(t); // Shuffle the sorted copy
 

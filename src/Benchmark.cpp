@@ -15,7 +15,6 @@ void Benchmark::run(Vector& V) {
     int numBreaks = V.getNumBreaks();
     std::cout << "size " << V.getCurrentSize() << " seed " << seed << " breaks " << numBreaks << "\n\n";
 
-    std::cout << "a " << a << " b " << b << " c " << c << "\n";
 
     // Determina o tamanho mínimo de partição usando o V original
     int minPartitionSize = sorter.determinePartitionThreshold(costThreshold, a, b, c);
