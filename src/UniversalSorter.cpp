@@ -93,10 +93,10 @@ int UniversalSorter::determinePartitionThreshold(double costThreshold, double a,
 
             VCopy.clear();
         }
-        int newMin = 0, newMax = 0;
-
         // * Calcula o menor custo entre os tamanhos de partição
         partitionThreshold = minCostIndex(stats, numMPS);
+
+        int newMin = 0, newMax = 0;
 
         // * Calcula o novo range de tamanhos de partição
         this->calculateNewRange(partitionThreshold, stats, minMPS, maxMPS, rangeMPS, newMax, newMin, numMPS);
@@ -142,10 +142,11 @@ int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, in
 
         for (int t = minMBS; t <= maxMBS; t += rangeMBS) {
             // Create a base sorted vector (0 to N-1) for shuffling
+            Statistics stats;
+            quickSort(V, -1, 0, V.getCurrentSize() - 1, stats);
+
             Vector baseSortedVector(V.getCurrentSize());
-            for (int k = 0; k < V.getCurrentSize(); ++k) {
-                baseSortedVector.push_back(k); // Fills with 0, 1, ..., V.getCurrentSize()-1
-            }
+            V.copy(baseSortedVector); // Copy the sorted vector to a new vector
 
             Vector VCopy1(V.getCurrentSize()), VCopy2(V.getCurrentSize());
             baseSortedVector.copy(VCopy1); // VCopy1 is now sorted (0..N-1)
@@ -185,9 +186,9 @@ int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, in
 
             numMBS++;
         }
-        int newMin = 0, newMax = 0;
-
         breaksThreshold = minCostIndex(ISstats, QSstats, numMBS);
+
+        int newMin = 0, newMax = 0;
 
         this->calculateNewRange(breaksThreshold, ISstats, minMBS, maxMBS, rangeMBS, newMin, newMax, numMBS);
 
