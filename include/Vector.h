@@ -49,5 +49,5 @@ class Vector {
     void copy(Vector& other) noexcept;
 
     //@ Embaralha o vetor, de acordo com o número de quebras
-    void shuffle(int numBreaks) noexcept;
+    int shuffle(int numShuffle);
 };

@@ -112,37 +112,20 @@ void Vector::copy(Vector& other) noexcept {
         other.data[i] = this->data[i]; // Copia diretamente para o array
     }
 }
-
-void Vector::shuffle(int numShuffle) noexcept {
-    if (currentSize <= 1) {
-        // No operation if 0 or 1 element.
-        return;
-    }
-
-    if (numShuffle < 0) {
-        std::cerr << "Erro: número de embaralhamentos não pode ser negativo.\n";
-        return;
-    }
-
-    int p1 = 0, p2 = 0; // Initialize to ensure the while loop runs the first time.
+int Vector::shuffle(int numShuffle) {
+    int currentSize = this->currentSize;
+    int p1 = 0, p2 = 0, temp;
     for (int t = 0; t < numShuffle; t++) {
-        // The while loop condition (p1 == p2) is met because p1 and p2 are
-        // either initialized to 0 (for the first iteration of the outer loop)
-        // or reset to 0 at the end of the previous outer loop iteration.
+        /* Gera dois índices distintos no intervalo [0..size-1] */
         while (p1 == p2) {
-            p1 = static_cast<int>(drand48() * currentSize);
-            p2 = static_cast<int>(drand48() * currentSize);
-            // This loop continues as long as p1 and p2 are the same.
-            // If currentSize is 1 (though guarded above), this would be an infinite loop.
-            // Since currentSize is guaranteed to be > 1 here, it's fine.
+            p1 = (int)(drand48() * currentSize);
+            p2 = (int)(drand48() * currentSize);
         }
-
-        this->swap(p1, p2);
-
-        // Reset p1 and p2 to ensure the while loop condition (p1 == p2)
-        // is true for the next iteration of the outer 'for' loop,
-        // forcing new random indices to be generated.
-        p1 = 0;
-        p2 = 0;
+        /* Realiza a troca para introduzir uma quebra */
+        temp = this->getElement(p1);
+        this->setElement(p1, this->getElement(p2));
+        this->setElement(p2, temp);
+        p1 = p2 = 0;
     }
+    return 0;
 }
