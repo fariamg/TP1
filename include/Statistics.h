@@ -60,6 +60,4 @@ class Statistics {
     //@ Printa na saída padrão as estatísticas
     void print() const noexcept;
 
-    //@ Limpa as estatísticas
-    void clear() noexcept;
 };

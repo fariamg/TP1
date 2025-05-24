@@ -61,12 +61,6 @@ void Statistics::print() const noexcept {
               << this->movements << " calls " << this->functionCalls << std::endl;
 }
 
-void Statistics::clear() noexcept {
-    this->comparisons = 0;
-    this->movements = 0;
-    this->functionCalls = 0;
-}
-
 void Statistics::setAlgorithmName(const std::string& name) noexcept {
     if (name.size() > ALGORITHM_NAME_SIZE) {
         std::cerr << "Error: Algorithm name exceeds maximum size." << std::endl;

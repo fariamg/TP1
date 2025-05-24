@@ -109,19 +109,17 @@ void Vector::copy(Vector& other) noexcept {
     }
     other.currentSize = this->currentSize;
     for (int i = 0; i < currentSize; ++i) {
-        other.data[i] = this->data[i]; // Copia diretamente para o array
+        other.data[i] = this->data[i]; 
     }
 }
 int Vector::shuffle(int numShuffle) {
     int currentSize = this->currentSize;
     int p1 = 0, p2 = 0, temp;
     for (int t = 0; t < numShuffle; t++) {
-        /* Gera dois índices distintos no intervalo [0..size-1] */
         while (p1 == p2) {
             p1 = (int)(drand48() * currentSize);
             p2 = (int)(drand48() * currentSize);
         }
-        /* Realiza a troca para introduzir uma quebra */
         temp = this->getElement(p1);
         this->setElement(p1, this->getElement(p2));
         this->setElement(p2, temp);
