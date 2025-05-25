@@ -33,7 +33,7 @@ void UniversalSorter::adaptiveSort(Vector& V_to_sort, int seed, double costThres
         finalSortStats.setAlgorithmName("none");
         //* O custo será 0 por padrão se resetStats() zerar tudo, incluindo o custo.
         //* Se calculateCost for chamado, ele confirmará 0.
-        finalSortStats.calculateCost(a, b, c); // Calcula o custo (será 0 para vetor vazio)
+        finalSortStats.calculateCost(a, b, c); //* Calcula o custo (será 0 para vetor vazio)
         std::cout << "INFO: Vetor está vazio. Nada a ordenar." << std::endl;
     } else {
         int minPartitionSize_calibrated;

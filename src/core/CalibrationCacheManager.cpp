@@ -68,7 +68,7 @@ void CalibrationCacheManager::loadCacheFromFile() {
 
 void CalibrationCacheManager::saveCacheToFileAtExit() {
     if (calibrationData.empty() && !cacheInitialized) {
-        /*Se o cache nunca foi inicializado (e, portanto, está vazio e não foi carregado),
+        /* Se o cache nunca foi inicializado (e, portanto, está vazio e não foi carregado),
         não há necessidade de criar um arquivo de cache vazio.
         No entanto, se foi inicializado e está vazio, pode ser intencional.
         Para simplificar, sempre tentamos salvar se foi inicializado.*/
