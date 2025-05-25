@@ -1,5 +1,5 @@
-#include "Benchmark.h"
-#include "Vector.h"
+#include "measurement/Benchmark.h"
+#include "datastructures/Vector.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>

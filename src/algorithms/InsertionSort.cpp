@@ -1,4 +1,4 @@
-#include "InsertionSort.h"
+#include "algorithms/InsertionSort.h"
 
 void insertionSort(Vector& V, int l, int r, Statistics& stats) {
     stats.setAlgorithmName("in");

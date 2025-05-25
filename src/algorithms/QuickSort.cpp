@@ -1,5 +1,5 @@
-#include "QuickSort.h"
-#include "InsertionSort.h"
+#include "algorithms/QuickSort.h"
+#include "algorithms/InsertionSort.h"
 
 int median(int a, int b, int c);
 
@@ -71,14 +71,14 @@ void partition(Vector& V, int l, int r, int& i, int& j, Statistics& stats) {
 
 int median(int a, int b, int c) {
     if ((a <= b) && (b <= c))
-        return b; 
+        return b;
     if ((a <= c) && (c <= b))
-        return c; 
+        return c;
     if ((b <= a) && (a <= c))
-        return a; 
+        return a;
     if ((b <= c) && (c <= a))
-        return c; 
+        return c;
     if ((c <= a) && (a <= b))
-        return a; 
-    return b;     
+        return a;
+    return b;
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Statistics.h"
-#include "Timer.h"
-#include "Vector.h"
+#include "measurement/Statistics.h"
+#include "measurement/Timer.h"
+#include "datastructures/Vector.h"
 
 //@ Cuida da execução do algoritmo, medindo o tempo e coletando estatísticas
 class Benchmark {
