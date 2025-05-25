@@ -25,5 +25,5 @@ class Timer {
     double elapsedSeconds() const noexcept;
 
     //@ Retorna o tempo decorrido em milissegundos
-    long Nananoseconds() const noexcept; // TODO: pode ser que long não seja o melhor tipo
+    long Nananoseconds() const noexcept; 
 };

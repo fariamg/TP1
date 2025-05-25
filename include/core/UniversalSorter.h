@@ -3,6 +3,7 @@
 #include "measurement/Statistics.h"
 #include "datastructures/Vector.h"
 
+//@ Classe que implementa o algoritmo de ordenação adaptativa
 class UniversalSorter {
   public:
     //@ Construtor padrão
@@ -15,11 +16,9 @@ class UniversalSorter {
     void sort(Vector& V_op, int minPartitionSize, int breakThreshold, Statistics& stats); 
 
     //@ Método para determinar o limite de partição para o QuickSort ser mais eficiente
-    // MODIFICADO: Deve aceitar Vector& como parâmetro
     int determinePartitionThreshold(Vector& V_calibrate_on, double costThreshold, double a, double b, double c);
 
     //@ Define o limite de quebras para o InsertionSort ser mais eficiente
-    // MODIFICADO: Deve aceitar Vector& como parâmetro
     int determineBreaksThreshold(Vector& V_sorted_calibrate_on, int seed, double costThreshold, int minPartitionSize, double a, double b, double c);
 
     //@ Método para calcular o novo intervalo

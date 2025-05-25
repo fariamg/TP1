@@ -3,39 +3,41 @@
 #include <map>
 #include <optional>
 #include <string>
-#include <tuple> // Adicionar para std::tuple
+#include <tuple>
 #include <utility>
 
+//@ Cuida do cache de calibração, armazenando e recuperando limiares calibrados
 class CalibrationCacheManager {
   private:
-    // Nova definição para a chave do cache
+    //@Estrutura de chave para o cache, composta por tamanho do vetor e coeficientes de custo.
     using CacheKey = std::tuple<int, std::string, std::string, std::string>;
+
+    //@ Mapa que armazena os limiares calibrados, mapeando a chave para um par de inteiros (minPartitionSize, breaksThreshold).
     static std::map<CacheKey, std::pair<int, int>> calibrationData;
+
+    //@ Nome do arquivo onde o cache será salvo.
     static const std::string cacheFilename;
     static bool cacheInitialized;
 
-    // Carrega o cache do arquivo.
+    //@ Carrega o cache do arquivo.
     static void loadCacheFromFile();
 
-    // Salva o cache no arquivo (geralmente chamado via atexit).
+    //@ Salva o cache no arquivo (geralmente chamado via atexit).
     static void saveCacheToFileAtExit();
 
-    // Construtor privado para evitar instanciação, pois é uma classe puramente estática.
+    //@ Construtor privado para evitar instanciação, pois é uma classe puramente estática.
     CalibrationCacheManager() = delete;
 
   public:
-    // Garante que o cache seja carregado (se ainda não foi) e que o salvamento na saída seja registrado.
-    // Deve ser chamado uma vez, por exemplo, no início do programa ou na primeira vez que o cache é acessado.
+    // @ Metodo estático para inicializar o cache, carregando os dados do arquivo se necessário.
     static void initialize();
 
-    // Obtém os limiares calibrados para um determinado tamanho de vetor e coeficientes de custo.
-    // Retorna std::nullopt se os limiares não estiverem no cache.
+    //@ Obtém os limiares calibrados para um determinado tamanho de vetor e coeficientes de custo.
     static std::optional<std::pair<int, int>> getThresholds(int vectorSize, double a, double b, double c);
 
-    // Armazena (ou atualiza) os limiares calibrados no cache.
+    //@ Armazena (ou atualiza) os limiares calibrados no cache.
     static void storeThresholds(int vectorSize, double a, double b, double c, int minPartitionSize, int breaksThreshold);
 
-    // Força o salvamento imediato do cache para o arquivo.
-    // Útil para testes ou se você não quiser depender apenas do atexit.
+    //@ Força o salvamento imediato do cache para o arquivo.
     static void forceSaveCache();
 };

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-/// @ Cuida da coleta de estatísticas de execução do algoritmo
+///@ Cuida da coleta de estatísticas de execução do algoritmo
 class Statistics {
   private:
     int comparisons;           //* Número de comparações
@@ -14,6 +14,7 @@ class Statistics {
     std::string algorithmName; //* Algoritmo utilizado
 
   public:
+    //@ Tamanho máximo do nome do algoritmo
     static constexpr std::size_t ALGORITHM_NAME_SIZE = 2;
 
     //@ Construtor padrão explícito (evita conversões implícitas)

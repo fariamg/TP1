@@ -8,8 +8,7 @@
 class Benchmark {
   private:
     Timer timer;
-    // * Esses atributos são específicos do Benchmark, pois podem variar a cada execução
-    double a, b, c;
+    double a, b, c; // * Esses atributos são específicos do Benchmark, pois podem variar a cada execução
     int seed;
     double costThreshold;
 
@@ -17,5 +16,6 @@ class Benchmark {
     //@ Construtor que recebe os coeficientes e parametros do benchmark
     Benchmark(double a, double b, double c, int seed, double costThreshold);
 
+    //@ Método que executa o benchmark em um vetor
     void run(Vector& V);
 };
