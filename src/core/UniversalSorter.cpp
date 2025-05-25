@@ -1,38 +1,107 @@
 #include <algorithm>
 #include <cmath>
 
-#include "InsertionSort.h"
-#include "QuickSort.h"
-#include "Statistics.h"
-#include "UniversalSorter.h"
+#include "algorithms/InsertionSort.h"
+#include "algorithms/QuickSort.h"
+#include "core/CalibrationCacheManager.h"
+#include "core/UniversalSorter.h"
+#include "measurement/Statistics.h"
 #include <iomanip>
 
-UniversalSorter::UniversalSorter(Vector& V) : V(V) {}
-
-void UniversalSorter::sort(Vector& V, int minPartitionSize, int breakThreshold, Statistics& stats) {
-    int vectorSize = V.getCurrentSize();
-    int vectorBreaks = V.getNumBreaks();
+void UniversalSorter::sort(Vector& V_op, int minPartitionSize, int breakThreshold, Statistics& stats) {
+    int vectorSize = V_op.getCurrentSize();
+    int vectorBreaks = V_op.getNumBreaks();
+    stats.resetStats(); // Garante que as estatísticas estão limpas para esta operação
 
     if (vectorBreaks < breakThreshold) {
-        //* Vetor "quase ordenado" utiliza InsertionSort
-        insertionSort(V, 0, vectorSize - 1, stats);
+        insertionSort(V_op, 0, vectorSize - 1, stats);
     } else {
-        if (vectorSize > minPartitionSize) {
-            //* Já se tiver muitas quebras e o tamanho do vetor for maior que o tamanho mínimo de partição usa QuickSort
-            quickSort(V, minPartitionSize, 0, vectorSize - 1, stats);
-        } else {
-            // * Já se for menor ou igual utiliza InsertionSort (em vetores pequenos, a sobrecarga do quicksort não compensa)
-            insertionSort(V, 0, vectorSize - 1, stats);
+        if (vectorSize > minPartitionSize && vectorSize > 0) {
+            quickSort(V_op, minPartitionSize, 0, vectorSize - 1, stats);
+        } else if (vectorSize > 0) { // Se não for grande o suficiente para QS ou minPartitionSize for grande
+            insertionSort(V_op, 0, vectorSize - 1, stats);
         }
     }
 }
 
+void UniversalSorter::adaptiveSort(Vector& V_to_sort, int seed, double costThreshold, double a, double b, double c, Statistics& finalSortStats) {
+    CalibrationCacheManager::initialize();
+
+    int currentSize = V_to_sort.getCurrentSize();
+    if (currentSize == 0) {
+        finalSortStats.resetStats();
+        finalSortStats.setAlgorithmName("none");
+        // O custo será 0 por padrão se resetStats() zerar tudo, incluindo o custo.
+        // Se calculateCost for chamado, ele confirmará 0.
+        finalSortStats.calculateCost(a, b, c); // Calcula o custo (será 0 para vetor vazio)
+        std::cout << "INFO: Vetor está vazio. Nada a ordenar." << std::endl;
+        // A impressão das estatísticas finais abaixo cobrirá este caso.
+    } else {
+        int minPartitionSize_calibrated;
+        int breaksThreshold_calibrated;
+
+        // Passar a, b, c para getThresholds
+        std::optional<std::pair<int, int>> cachedThresholds = CalibrationCacheManager::getThresholds(currentSize, a, b, c);
+
+        if (cachedThresholds.has_value()) {
+            minPartitionSize_calibrated = cachedThresholds.value().first;
+            breaksThreshold_calibrated = cachedThresholds.value().second;
+            std::cout << "INFO: Usando calibração do cache para tamanho " << currentSize << " (custo: a=" << a << ",b=" << b << ",c=" << c
+                      << ")" // Opcional: log extra
+                      << ": MPS=" << minPartitionSize_calibrated << ", LQ_threshold=" << breaksThreshold_calibrated << std::endl;
+        } else {
+            std::cout << "INFO: Calibrando para tamanho " << currentSize << " (custo: a=" << a << ",b=" << b << ",c=" << c
+                      << ")" // Opcional: log extra
+                      << "..." << std::endl;
+
+            Vector V_copy_for_mps_calib(currentSize);
+            V_to_sort.copy(V_copy_for_mps_calib);
+            minPartitionSize_calibrated = determinePartitionThreshold(V_copy_for_mps_calib, costThreshold, a, b, c);
+
+            Vector V_copy_for_lq_calib(currentSize);
+            V_to_sort.copy(V_copy_for_lq_calib);
+            Statistics tempSortStats;
+            quickSort(V_copy_for_lq_calib, minPartitionSize_calibrated, 0, V_copy_for_lq_calib.getCurrentSize() - 1, tempSortStats);
+            breaksThreshold_calibrated = determineBreaksThreshold(V_copy_for_lq_calib, seed, costThreshold, minPartitionSize_calibrated, a, b, c);
+
+            // Passar a, b, c para storeThresholds
+            CalibrationCacheManager::storeThresholds(currentSize, a, b, c, minPartitionSize_calibrated, breaksThreshold_calibrated);
+            std::cout << "INFO: Calibração completa para tamanho " << currentSize << ". Armazenado: MPS=" << minPartitionSize_calibrated
+                      << ", LQ_threshold=" << breaksThreshold_calibrated << std::endl;
+        }
+
+        std::cout << "INFO: Ordenando vetor original com limiares calibrados..." << std::endl;
+        // finalSortStats é passado por referência e será preenchido por sort() com CMP, MOV, CALLS
+        this->sort(V_to_sort, minPartitionSize_calibrated, breaksThreshold_calibrated, finalSortStats);
+
+        // >>> ADICIONAR ESTA LINHA PARA CALCULAR O CUSTO FINAL <<<
+        finalSortStats.calculateCost(a, b, c);
+    }
+
+    // Imprime estatísticas da ordenação final
+    std::cout << "INFO: Ordenação adaptativa final completa. Algoritmo: " << finalSortStats.getAlgorithmName()
+              << ", CMP: " << finalSortStats.getComparisons() << ", MOV: " << finalSortStats.getMovements()
+              << ", CALLS: " << finalSortStats.getFunctionCalls() << ", Custo: ";
+    if (finalSortStats.getCost() != 0.0 ||
+        (finalSortStats.getComparisons() == 0 && finalSortStats.getMovements() == 0 && finalSortStats.getFunctionCalls() == 0 && currentSize == 0)) {
+        std::cout << std::fixed << std::setprecision(9) << finalSortStats.getCost();
+    } else if (finalSortStats.getComparisons() != 0 || finalSortStats.getMovements() != 0 || finalSortStats.getFunctionCalls() != 0) {
+        // Se CMP/MOV/CALLS não são zero, mas o custo é, isso ainda é suspeito (a menos que a,b,c sejam zero)
+        // Mas com a chamada a calculateCost acima, isso deve ser corrigido.
+        // Se a,b,c forem de fato zero, então o custo será zero.
+        std::cout << std::fixed << std::setprecision(9) << finalSortStats.getCost();
+    } else {
+        std::cout << "0.000000000"; // Para o caso de vetor vazio onde tudo é 0
+    }
+    std::cout << std::endl;
+}
+
 //* Os parametros são atributos do benchmark (cada benchmark pode receber valores diferentes)
 //* Funções relacionadas a print de estatísticas estão alocadas externamente, mantendo principios de encapsulamento
-int UniversalSorter::determinePartitionThreshold(double costThreshold, double a, double b, double c) {
+int UniversalSorter::determinePartitionThreshold(Vector& V_calibrate_on, double costThreshold, double a, double b, double c) {
     int minMPS = 2; // * Tamanhos 0 e 1 já estão ordenados
 
-    int maxMPS = V.getCurrentSize(); // * Tamanho de partição até o tamanho maximo do vetor
+    int maxMPS = V_calibrate_on.getCurrentSize(); // * Tamanho de partição até o tamanho maximo do vetor
 
     int rangeMPS = (maxMPS - minMPS) / 5; // * Se V size for 100, testaremos, por exemplo: 2, 22, 42, 62, 82 e 100 ((100-2)/5 = 98/5 = 19.6 ≈ 20)
     if (rangeMPS == 0)
@@ -58,10 +127,10 @@ int UniversalSorter::determinePartitionThreshold(double costThreshold, double a,
 
         for (int t = minMPS; t <= maxMPS; t += rangeMPS) {
             // * Cria-se um vetor do tamanho do vetor original (desalocado após sair do escopo)
-            Vector VCopy(V.getCurrentSize());
+            Vector VCopy(V_calibrate_on.getCurrentSize());
 
             // * Copia o vetor original para o vetor auxiliar
-            V.copy(VCopy);
+            V_calibrate_on.copy(VCopy);
 
             stats[numMPS].resetStats(); // * Reseta as estatísticas
 
@@ -118,9 +187,10 @@ int UniversalSorter::determinePartitionThreshold(double costThreshold, double a,
 }
 
 // ! SEED E LIMIAR DE CUSTO SÃO PARAMETROS DO BENCHMARK
-int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, int minPartitionSize, double a, double b, double c) {
-    int minMBS = 1;                      // * Tamanhos 0 e 1 já estão ordenados
-    int maxMBS = V.getCurrentSize() / 2; // * Tamanho de partição até o tamanho maximo do vetor
+int UniversalSorter::determineBreaksThreshold(Vector& V_sorted_calibrate_on, int seed, double costThreshold, int minPartitionSize, double a, double b,
+                                              double c) {
+    int minMBS = 1;                                          // * Tamanhos 0 e 1 já estão ordenados
+    int maxMBS = V_sorted_calibrate_on.getCurrentSize() / 2; // * Tamanho de partição até o tamanho maximo do vetor
     int rangeMBS = (maxMBS - minMBS) / 5;
     int numMBS = 5; // * Número de quebras
 
@@ -143,12 +213,12 @@ int UniversalSorter::determineBreaksThreshold(int seed, double costThreshold, in
         for (int t = minMBS; t <= maxMBS; t += rangeMBS) {
             // Create a base sorted vector (0 to N-1) for shuffling
             Statistics stats;
-            quickSort(V, -1, 0, V.getCurrentSize() - 1, stats);
+            quickSort(V_sorted_calibrate_on, -1, 0, V_sorted_calibrate_on.getCurrentSize() - 1, stats);
 
-            Vector baseSortedVector(V.getCurrentSize());
-            V.copy(baseSortedVector); // Copy the sorted vector to a new vector
+            Vector baseSortedVector(V_sorted_calibrate_on.getCurrentSize());
+            V_sorted_calibrate_on.copy(baseSortedVector); // Copy the sorted vector to a new vector
 
-            Vector VCopy1(V.getCurrentSize()), VCopy2(V.getCurrentSize());
+            Vector VCopy1(V_sorted_calibrate_on.getCurrentSize()), VCopy2(V_sorted_calibrate_on.getCurrentSize());
             baseSortedVector.copy(VCopy1); // VCopy1 is now sorted (0..N-1)
             baseSortedVector.copy(VCopy2); // VCopy2 is now sorted (0..N-1)
 
